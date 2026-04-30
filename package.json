@@ -1,0 +1,16 @@
+{
+  "name": "beauty-center",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "migrate": "knex migrate:latest",
+    "seed": "knex seed:run"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "knex": "^3.2.9"
+  },
+  "dependencies": {
+    "mysql2": "^3.22.3"
+  }
+}
