@@ -11,6 +11,12 @@ const productRoutes = require('./routes/products');
 const appointmentRoutes = require('./routes/appointments');
 const packageRoutes = require('./routes/packages');
 const financeRoutes = require('./routes/finance');
+const roleRoutes = require('./routes/roles');
+const roomRoutes = require('./routes/rooms');
+const orderRoutes = require('./routes/orders');
+const cashSessionRoutes = require('./routes/cash_sessions');
+const professionalPaymentRoutes = require('./routes/professional_payments');
+
 
 dotenv.config();
 const app = express();
@@ -29,6 +35,12 @@ app.use('/api/products', productRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/finance', financeRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/cash-sessions', cashSessionRoutes);
+app.use('/api/professional-payments', professionalPaymentRoutes);
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Backend listening on port ${PORT}`));

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import Professionals from './Professionals';
+import Roles from './Roles';
+import Services from './Services';
+import Rooms from './Rooms';
+import Products from './Products';
 
 function Settings() {
   const [activeTab, setActiveTab] = useState('professionals');
@@ -17,49 +21,13 @@ function Settings() {
       case 'professionals':
         return <Professionals />;
       case 'roles':
-        return (
-          <div>
-            <h3>Cargos e Perfis de Acesso</h3>
-            <p>Defina cargos, permissões e acessos ao sistema.</p>
-            <button className="btn-primary" style={{ marginTop: '10px' }}>+ Novo Cargo</button>
-            <div style={{ marginTop: '20px', padding: '20px', border: '1px dashed #ccc', borderRadius: '8px' }}>
-              <p style={{ color: 'var(--color-text-muted)' }}>Módulo de cargos e perfis em construção...</p>
-            </div>
-          </div>
-        );
+        return <Roles />;
       case 'services':
-        return (
-          <div>
-            <h3>Serviços Oferecidos</h3>
-            <p>Cadastre e gerencie os serviços prestados (ex: Corte, Coloração, Manicure).</p>
-            <button className="btn-primary" style={{ marginTop: '10px' }}>+ Novo Serviço</button>
-            <div style={{ marginTop: '20px', padding: '20px', border: '1px dashed #ccc', borderRadius: '8px' }}>
-              <p style={{ color: 'var(--color-text-muted)' }}>Módulo de serviços em construção...</p>
-            </div>
-          </div>
-        );
+        return <Services />;
       case 'products':
-        return (
-          <div>
-            <h3>Produtos e Estoque</h3>
-            <p>Gerencie produtos para venda ou uso interno.</p>
-            <button className="btn-primary" style={{ marginTop: '10px' }}>+ Novo Produto</button>
-            <div style={{ marginTop: '20px', padding: '20px', border: '1px dashed #ccc', borderRadius: '8px' }}>
-              <p style={{ color: 'var(--color-text-muted)' }}>Módulo de produtos em construção...</p>
-            </div>
-          </div>
-        );
+        return <Products />;
       case 'rooms':
-        return (
-          <div>
-            <h3>Salas e Espaços</h3>
-            <p>Gerencie a disponibilidade de salas, macas e lavatórios.</p>
-            <button className="btn-primary" style={{ marginTop: '10px' }}>+ Nova Sala</button>
-            <div style={{ marginTop: '20px', padding: '20px', border: '1px dashed #ccc', borderRadius: '8px' }}>
-              <p style={{ color: 'var(--color-text-muted)' }}>Módulo de salas em construção...</p>
-            </div>
-          </div>
-        );
+        return <Rooms />;
       default:
         return null;
     }
