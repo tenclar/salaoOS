@@ -16,6 +16,7 @@ const roomRoutes = require('./routes/rooms');
 const orderRoutes = require('./routes/orders');
 const cashSessionRoutes = require('./routes/cash_sessions');
 const professionalPaymentRoutes = require('./routes/professional_payments');
+const dashboardRoutes = require('./routes/dashboard');
 
 
 dotenv.config();
@@ -26,7 +27,7 @@ app.use(express.json());
 // Simple health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// Register routes (placeholders for now)
+// Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/professionals', professionalRoutes);
@@ -40,6 +41,7 @@ app.use('/api/rooms', roomRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cash-sessions', cashSessionRoutes);
 app.use('/api/professional-payments', professionalPaymentRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 const PORT = process.env.PORT || 4000;

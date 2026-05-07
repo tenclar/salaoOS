@@ -3,6 +3,7 @@ import api from '../services/api';
 
 function Professionals() {
   const [professionals, setProfessionals] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
@@ -10,7 +11,7 @@ function Professionals() {
     name: '',
     phone: '',
     email: '',
-    role: 'profissional',
+    role: '',
     specialty: '',
     commission_rate: 0
   };
@@ -27,8 +28,19 @@ function Professionals() {
       });
   };
 
+  const fetchRoles = () => {
+    api.get('/roles')
+      .then(response => {
+        setRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching roles:', error);
+      });
+  };
+
   useEffect(() => {
     fetchProfessionals();
+    fetchRoles();
   }, []);
 
   const handleInputChange = (e) => {
@@ -63,35 +75,40 @@ function Professionals() {
     setFormData(initialFormState);
   };
 
+  const [professionalToDelete, setProfessionalToDelete] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editingId) {
         await api.put(`/professionals/${editingId}`, formData);
-        alert('Profissional atualizado com sucesso!');
       } else {
         await api.post('/professionals', formData);
-        alert('Profissional criado com sucesso!');
       }
       handleCloseForm();
       fetchProfessionals();
     } catch (error) {
       console.error('Error saving professional:', error);
-      alert('Erro ao salvar profissional.');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este profissional?')) {
-      try {
-        await api.delete(`/professionals/${id}`);
-        alert('Profissional excluído com sucesso!');
-        fetchProfessionals();
-      } catch (error) {
-        console.error('Error deleting professional:', error);
-        alert('Erro ao excluir profissional.');
-      }
+  const handleDeleteRequest = (id) => {
+    setProfessionalToDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!professionalToDelete) return;
+    try {
+      await api.delete(`/professionals/${professionalToDelete}`);
+      setProfessionalToDelete(null);
+      fetchProfessionals();
+    } catch (error) {
+      console.error('Error deleting professional:', error);
     }
+  };
+
+  const cancelDelete = () => {
+    setProfessionalToDelete(null);
   };
 
   return (
@@ -129,8 +146,10 @@ function Professionals() {
               <div className="form-group" style={{ flex: 1 }}>
                 <label>Cargo *</label>
                 <select name="role" value={formData.role} onChange={handleInputChange} required className="form-control" style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}>
-                  <option value="profissional">Profissional / Especialista</option>
-                  <option value="recepcao">Recepção / Gerência</option>
+                  <option value="">Selecione um cargo...</option>
+                  {roles.map(role => (
+                    <option key={role.id} value={role.name}>{role.name}</option>
+                  ))}
                 </select>
               </div>
               <div className="form-group" style={{ flex: 1 }}>
@@ -177,7 +196,7 @@ function Professionals() {
                     <td>{pro.id}</td>
                     <td>{pro.name}</td>
                     <td>{pro.specialty || '-'}</td>
-                    <td>{pro.role === 'recepcao' ? 'Recepção' : 'Profissional'}</td>
+                    <td>{pro.role || '-'}</td>
                     <td>
                       <button 
                         onClick={() => handleOpenForm(pro)} 
@@ -186,7 +205,7 @@ function Professionals() {
                         Editar
                       </button>
                       <button 
-                        onClick={() => handleDelete(pro.id)} 
+                        onClick={() => handleDeleteRequest(pro.id)} 
                         style={{ color: '#dc3545', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
                       >
                         Excluir
@@ -197,6 +216,30 @@ function Professionals() {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Exclusão */}
+      {professionalToDelete && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+          <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '8px', maxWidth: '400px', width: '100%', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+            <h3 style={{ marginBottom: '15px', color: '#212121' }}>Confirmar Exclusão</h3>
+            <p style={{ marginBottom: '25px', color: '#666' }}>Tem certeza que deseja excluir este profissional? Esta ação não pode ser desfeita.</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+              <button 
+                onClick={cancelDelete} 
+                style={{ padding: '10px 20px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#fff', fontWeight: 'bold' }}
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={confirmDelete} 
+                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#dc3545', color: '#fff', fontWeight: 'bold' }}
+              >
+                Sim, Excluir
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
